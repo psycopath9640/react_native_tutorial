@@ -115,7 +115,7 @@ export const addPromos = (promos) => ({
 });
 
 
-export const fetchleaders = () => (dispatch) => {
+export const fetchLeaders = () => (dispatch) => {
     dispatch(leadersLoading());
 
 
@@ -135,7 +135,7 @@ export const fetchleaders = () => (dispatch) => {
             throw errMess;
         })
         .then(response => response.json())
-        .then(leaders => dispatch(addleaders(leaders)))
+        .then(leaders => dispatch(addLeaders(leaders)))
         .catch(error => dispatch(leadersFailed(error.message)))
 };
 
