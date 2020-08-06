@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Home from './HomeComponent';
+import Reservation from './ReservationComponent';
 import { View, Platform, Image, StyleSheet, ScrollView, Text } from 'react-native';
 import { createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView } from 'react-navigation';
 import Contact from './ContactComponent';
@@ -9,7 +10,7 @@ import About from './AboutComponent';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchPromos, fetchLeaders } from '../redux/ActionCreators';
-import Reservation from './ReservationComponent';
+
 
 const mapStateToProps = state => {
     return {
@@ -194,7 +195,7 @@ const MainNavigator = createDrawerNavigator({
         screen: ContactNavigator,
         navigationOptions: {
             title: 'Contact Us',
-            drawLabel: 'Contact Us',
+            drawerLabel: 'Contact Us',
             drawerIcon: ({ tintColor }) => (
                 <Icon 
                 name='address-card'
@@ -209,7 +210,7 @@ const MainNavigator = createDrawerNavigator({
         screen: ReservationNavigator,
         navigationOptions: {
             title: 'Reserve Table',
-            drawLabel: 'Reserve Table',
+            drawerLabel: 'Reserve Table',
             drawerIcon: ({ tintColor }) => (
                 <Icon 
                 name='cutlery'
