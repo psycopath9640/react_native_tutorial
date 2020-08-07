@@ -61,10 +61,11 @@ function RenderComments(props) {
     const comments = props.comments;
 
     const renderCommentItem = ({ item, index }) => {
+        const  rating = item.rating;
         return(
             <View key={index} style={{margin: 10}}>
                 <Text style={{fontSize: 14}}>{item.comment}</Text>
-                <Text style={{fontSize: 12}}>{item.rating} Stars</Text>
+                <Rating imageSize={13} readonly startingValue={rating} style={styles.rating}/>
                 <Text style={{fontSize: 12}}>{'-- ' + item.author + ', ' + item.date}</Text>
             </View>
         );
@@ -215,6 +216,10 @@ const styles = StyleSheet.create({
     modalText: {
         fontSize: 18,
         margin: 10
+    },
+    rating: {
+        alignItems: 'flex-start',
+        //flex: 1
     }
 });
 
