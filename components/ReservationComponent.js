@@ -5,7 +5,7 @@ import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
 import { Notifications } from "expo";
 import * as Permissions from 'expo-permissions';
-
+import * as Calendar from 'expo-calendar';
 
 class Reservation extends Component {
     constructor(props) {
@@ -43,12 +43,42 @@ class Reservation extends Component {
                     text: 'Ok',
                     onPress:() => {
                         this.presentLocalNotification(this.state.date);
+                        this.addReservationToCalendar(this.state.date);
                         this.resetForm();
                     }
                 }
             ],
             { cancelable: false }
         ) 
+    }
+
+    obtainCalendarPermission = async () => {
+        const calendarPermission = await Permissions.getAsync( Permissions.CALENDAR );
+
+        if ( calendarPermission.status !== 'granted' ) {
+            calendarPermission = await Permissions.askAsync(Permissions.CALENDAR)
+            if ( calendarPermission.status !== 'granted' ){
+                Alert.alert("Permission not granted")
+            }
+        }
+        return calendarPermission
+    }
+
+    async addReservationToCalendar(date) {
+        await this.obtainCalendarPermission();
+        const startDate = new Date(Date.parse(date));
+        const endDate = new Date(Date.parse(date) + (2 * 60 * 60 * 1000)); // 2 hours
+        Calendar.createEventAsync(
+            Calendar.DEFAULT,
+            {
+                title: 'Con Fusion Table Reservation',
+                location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong',
+                startDate,
+                endDate,
+                timeZone: 'Asia/Hong_Kong',
+            },
+        );
+        Alert.alert('Reservation has been added to your calendar');
     }
 
     resetForm() {
@@ -151,6 +181,24 @@ class Reservation extends Component {
             </ScrollView>
         );
     }
+    onDateOrTimeChange = (event, selectedDate) => {
+        const currentDate = selectedDate || date;
+        this.setState({ mode: Platform.OS === 'ios' });
+        this.setState({ date: currentDate });
+    }
+
+    showMode = currentMode => {
+        this.setState({ show: true });
+        this.setState({ mode: currentMode});
+    };
+
+    showDatepicker = () => {
+        this.showMode('date');
+    };
+
+    showTimepicker = () => {
+        this.showMode('time');
+    };
 }
 
 

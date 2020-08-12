@@ -165,20 +165,43 @@ class RegisterTab extends Component {
 
 
     getImageFromCamera = async () => {
-        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
-        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA)
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL)
         
         if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
             try {
-                let capturedImage = await ImagePicker.lanchCameraAsync({
+                const capturedImage = await ImagePicker.lanchCameraAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    allowsEditing: true,
+                    aspect: [4,3],
+                    quality: 1
+                })
+
+                if (!capturedImage.cancelled) {
+                    this.processImage(capturedImage.uri);
+                }
+            }
+            catch (E) {
+                console.log(E);
+            }
+        }
+    }
+
+    getImageFromGallery = async () => {
+        const cameraPermission = await Permissions.askAsync(Permissions.CAMERA)
+        const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+        
+        if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+            try {
+                const selectedImage = await ImagePicker.lanchImageLibraryAsync({
                     mediaTypes: ImagePicker.MediaTypeOptions.Images,
                     allowsEditing: true,
                     aspect: [4,3],
                     quality: 1
                 });
 
-                if (!capturedImage.cancelled) {
-                    this.processImage(capturedImage.uri);
+                if (!selectedImage.cancelled) {
+                    this.processImage(selectedImage.uri);
                 }
             }
             catch (E) {
@@ -211,6 +234,10 @@ class RegisterTab extends Component {
                         <Button 
                             title='Camera'
                             onPress={this.getImageFromCamera}
+                            />
+                        <Button 
+                            title='Gallery'
+                            onPress={this.getImageFromGallery}
                             />
                     </View>
                     <Input 
@@ -296,7 +323,8 @@ const styles = StyleSheet.create({
     imageContainer: {
         flex: 1,
         flexDirection: 'row',
-        margin: 20
+        margin: 20,
+        justifyContent: 'space-around'
     },
     image: {
         margin: 10,
